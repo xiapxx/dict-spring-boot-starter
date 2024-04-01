@@ -6,7 +6,7 @@
     2. 如果项目依赖了mybatis或mybatis plus
     
        sql:
-       select 'businessType#100#1' from ...
+       select 'businessType#100#1' dict from ...
 
        实体:
        class XXEntity {
