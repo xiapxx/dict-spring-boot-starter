@@ -3,7 +3,7 @@ package io.github.xiapxx.starter.dict;
 import io.github.xiapxx.starter.dict.holder.DictHolder;
 import io.github.xiapxx.starter.dict.interfaces.DictProvider;
 import io.github.xiapxx.starter.dict.mybatis.DictTypeHandlerRegister;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -17,9 +17,8 @@ public class DictAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DictHolder.class)
-    @ConditionalOnBean(DictProvider.class)
-    public DictHolder dictHolder(DictProvider dictProvider){
-        return new DictHolder(dictProvider);
+    public DictHolder dictHolder(ObjectProvider<DictProvider> dictProvider){
+        return new DictHolder(dictProvider.getIfAvailable());
     }
 
 }

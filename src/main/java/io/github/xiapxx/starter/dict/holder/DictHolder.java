@@ -33,7 +33,7 @@ public class DictHolder implements InitializingBean {
     }
 
     public DictHolder(DictProvider dictProvider){
-        this.dictItemList = dictProvider.getDictList();
+        this.dictItemList = dictProvider == null ? new ArrayList<>() : dictProvider.getDictList();
     }
 
     public DictHolder add(String businessType, String parentCode, String code, String name, String nameEn){
