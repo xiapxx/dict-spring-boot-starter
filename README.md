@@ -4,6 +4,7 @@
 使用方法
     1. 通过DictHolder来获取字典
     2. 如果项目依赖了mybatis或mybatis plus
+    
        sql:
        select 'businessType#100#1' from ...
 
