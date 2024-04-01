@@ -3,6 +3,7 @@ package io.github.xiapxx.starter.dict.holder;
 import io.github.xiapxx.starter.dict.interfaces.DictProvider;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,21 +56,10 @@ public class DictHolder implements InitializingBean {
         return this;
     }
 
-    public DictItem get(String code){
-        return getItem(null, null, code);
-    }
 
-    public DictItem get(String parentCode, String code){
-        return getItem(null, parentCode, code);
-    }
-
-    public DictItem get(String businessType, String parentCode, String code){
-        return getItem(businessType, parentCode, code);
-    }
-
-    private DictItem getItem(String businessType, String parentCode, String code){
-        String type = businessType == null ? DEFAULT_BUSINESS_TYPE : businessType;
-        String parent = parentCode == null ? DEFAULT_PARENT_CODE : parentCode;
+    public DictItem getItem(String businessType, String parentCode, String code){
+        String type = StringUtils.hasText(businessType) ? DEFAULT_BUSINESS_TYPE : businessType;
+        String parent = StringUtils.hasText(parentCode) ? DEFAULT_PARENT_CODE : parentCode;
         if(!dictMap.containsKey(type) || !dictMap.get(businessType).containsKey(parent)){
             return null;
         }

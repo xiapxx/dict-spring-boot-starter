@@ -6,53 +6,55 @@ package io.github.xiapxx.starter.dict.holder;
  */
 public class DictItem {
 
-    private String businessType;
+   private String businessType;
 
-    private String parentCode;
+   private String parentCode;
 
-    private String code;
+   private String code;
 
-    private String name;
+   private String name;
 
-    private String nameEn;
+   private String nameEn;
 
-    public String getParentCode() {
-        return parentCode;
-    }
 
-    public void setParentCode(String parentCode) {
-        this.parentCode = parentCode;
-    }
+   public String getBusinessType() {
+      return businessType;
+   }
 
-    public String getCode() {
-        return code;
-    }
+   public void setBusinessType(String businessType) {
+      this.businessType = businessType;
+   }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+   public String getParentCode() {
+      return parentCode;
+   }
 
-    public String getName() {
-        return name;
-    }
+   public void setParentCode(String parentCode) {
+      this.parentCode = parentCode;
+   }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+   public String getCode() {
+      return code;
+   }
 
-    public String getBusinessType() {
-        return businessType;
-    }
+   public void setCode(String code) {
+      this.code = code;
+   }
 
-    public void setBusinessType(String businessType) {
-        this.businessType = businessType;
-    }
+   public String getName() {
+      return name;
+   }
 
-    public String getNameEn() {
-        return nameEn;
-    }
+   public void setName(String name) {
+      this.name = name;
+   }
 
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
-    }
+   public String getNameEn() {
+      return nameEn;
+   }
+
+   public void setNameEn(String nameEn) {
+      this.nameEn = nameEn;
+   }
+
 }
