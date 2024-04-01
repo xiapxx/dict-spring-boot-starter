@@ -1,8 +1,8 @@
 package io.github.xiapxx.starter.dict.mybatis;
 
+import io.github.xiapxx.starter.dict.IDictionary;
 import io.github.xiapxx.starter.dict.holder.DictHolder;
 import io.github.xiapxx.starter.dict.interfaces.DictKeyTransfer;
-import io.github.xiapxx.starter.dict.interfaces.DictLanguageGetter;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
@@ -19,16 +19,12 @@ public class DictMybatisTypeHandlerRegister implements ConfigurationCustomizer {
     private ObjectProvider<DictKeyTransfer> dictKeyTransferObjectProvider;
 
     @Autowired
-    private ObjectProvider<DictLanguageGetter> dictLanguageGetterObjectProvider;
-
-    @Autowired
     private DictHolder dictHolder;
 
     @Override
     public void customize(Configuration configuration) {
         TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
-        IDictionaryTypeHandler dictionaryTypeHandler = new IDictionaryTypeHandler(dictKeyTransferObjectProvider.getIfAvailable(),
-                dictLanguageGetterObjectProvider.getIfAvailable(), dictHolder);
+        IDictionaryTypeHandler dictionaryTypeHandler = new IDictionaryTypeHandler(dictKeyTransferObjectProvider.getIfAvailable(), dictHolder);
         typeHandlerRegistry.register(IDictionary.class, dictionaryTypeHandler);
     }
 

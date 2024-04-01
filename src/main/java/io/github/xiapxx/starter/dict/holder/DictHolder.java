@@ -1,7 +1,11 @@
 package io.github.xiapxx.starter.dict.holder;
 
+import io.github.xiapxx.starter.dict.IDictionary;
+import io.github.xiapxx.starter.dict.interfaces.DictLanguageGetter;
 import io.github.xiapxx.starter.dict.interfaces.DictProvider;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import java.util.ArrayList;
@@ -27,6 +31,9 @@ public class DictHolder implements InitializingBean {
     private Map<String, Map<String, Map<String, DictItem>>> dictMap;
 
     private DictProvider dictProvider;
+
+    @Autowired
+    private ObjectProvider<DictLanguageGetter> dictLanguageGetterObjectProvider;
 
     public DictHolder(){
         dictItemList = new ArrayList<>();
@@ -56,14 +63,36 @@ public class DictHolder implements InitializingBean {
         return this;
     }
 
+    public List<IDictionary> getDictionaryList(String businessType, String parentCode){
+        String type = StringUtils.hasText(businessType) ? DEFAULT_BUSINESS_TYPE : businessType;
+        String parent = StringUtils.hasText(parentCode) ? DEFAULT_PARENT_CODE : parentCode;
+        if(!dictMap.containsKey(type) || !dictMap.get(businessType).containsKey(parent)){
+            return new ArrayList<>();
+        }
 
-    public DictItem getItem(String businessType, String parentCode, String code){
+        Map<String, DictItem> code2DictMap = dictMap.get(type).get(parent);
+        return code2DictMap.values().stream().map(item -> toIDictionary(item)).collect(Collectors.toList());
+    }
+
+
+    public IDictionary getDictionary(String businessType, String parentCode, String code){
         String type = StringUtils.hasText(businessType) ? DEFAULT_BUSINESS_TYPE : businessType;
         String parent = StringUtils.hasText(parentCode) ? DEFAULT_PARENT_CODE : parentCode;
         if(!dictMap.containsKey(type) || !dictMap.get(businessType).containsKey(parent)){
             return null;
         }
-        return dictMap.get(type).get(parent).get(code);
+        return toIDictionary(dictMap.get(type).get(parent).get(code));
+    }
+
+    private IDictionary toIDictionary(DictItem dictItem){
+        if(dictItem == null){
+            return null;
+        }
+        DictLanguageGetter dictLanguageGetter = dictLanguageGetterObjectProvider.getIfAvailable();
+        IDictionary dictionary = new IDictionary();
+        dictionary.setCode(dictItem.getCode());
+        dictionary.setName(dictLanguageGetter == null || dictLanguageGetter.isChinese() ? dictItem.getName() : dictItem.getNameEn());
+        return dictionary;
     }
 
     private void addItem(String businessType, String parentCode, String code, String name, String nameEn){

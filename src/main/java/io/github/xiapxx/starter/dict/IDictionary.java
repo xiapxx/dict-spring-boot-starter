@@ -1,4 +1,4 @@
-package io.github.xiapxx.starter.dict.mybatis;
+package io.github.xiapxx.starter.dict;
 
 import java.io.Serializable;
 

@@ -1,9 +1,8 @@
 package io.github.xiapxx.starter.dict.mybatis;
 
+import io.github.xiapxx.starter.dict.IDictionary;
 import io.github.xiapxx.starter.dict.holder.DictHolder;
-import io.github.xiapxx.starter.dict.holder.DictItem;
 import io.github.xiapxx.starter.dict.interfaces.DictKeyTransfer;
-import io.github.xiapxx.starter.dict.interfaces.DictLanguageGetter;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.util.StringUtils;
@@ -20,13 +19,10 @@ public class IDictionaryTypeHandler extends BaseTypeHandler<IDictionary> {
 
     private DictKeyTransfer dictKeyTransfer;
 
-    private DictLanguageGetter dictLanguageGetter;
-
     private DictHolder dictHolder;
 
-    public IDictionaryTypeHandler(DictKeyTransfer dictKeyTransfer, DictLanguageGetter dictLanguageGetter, DictHolder dictHolder){
+    public IDictionaryTypeHandler(DictKeyTransfer dictKeyTransfer, DictHolder dictHolder){
         this.dictKeyTransfer = dictKeyTransfer == null ? new DefaultDictKeyTransfer() : dictKeyTransfer;
-        this.dictLanguageGetter = dictLanguageGetter;
         this.dictHolder = dictHolder;
     }
 
@@ -59,19 +55,10 @@ public class IDictionaryTypeHandler extends BaseTypeHandler<IDictionary> {
         }
 
         DictKey dictKey = dictKeyTransfer.getKey(expression);
-        if(dictKey == null || StringUtils.hasText(dictKey.getCode())){
+        if(dictKey == null || !StringUtils.hasText(dictKey.getCode())){
             return null;
         }
-
-        DictItem item = dictHolder.getItem(dictKey.getBusinessType(), dictKey.getParentCode(), dictKey.getCode());
-        if(item == null){
-            return null;
-        }
-
-        IDictionary dictionary = new IDictionary();
-        dictionary.setCode(item.getCode());
-        dictionary.setName(dictLanguageGetter == null || dictLanguageGetter.isChinese() ? item.getName() : item.getNameEn());
-        return dictionary;
+        return dictHolder.getDictionary(dictKey.getBusinessType(), dictKey.getParentCode(), dictKey.getCode());
     }
 
 }
