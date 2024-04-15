@@ -1,6 +1,9 @@
 package io.github.xiapxx.starter.dict.holder;
 
 /**
+ * 1. 需保证businessType+code联合唯一
+ * 2. businessType,code,name等三个字段必填, 其他字段选填
+ *
  * @Author xiapeng
  * @Date 2024-04-01 10:28
  */

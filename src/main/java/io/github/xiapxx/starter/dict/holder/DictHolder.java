@@ -1,11 +1,7 @@
 package io.github.xiapxx.starter.dict.holder;
 
-import io.github.xiapxx.starter.dict.IDictionary;
-import io.github.xiapxx.starter.dict.interfaces.DictLanguageGetter;
 import io.github.xiapxx.starter.dict.interfaces.DictProvider;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import java.util.ArrayList;
@@ -22,18 +18,15 @@ import java.util.stream.Collectors;
  */
 public class DictHolder implements InitializingBean {
 
-    private static final String DEFAULT_BUSINESS_TYPE = "_default_type";
-
-    private static final String DEFAULT_PARENT_CODE = "_default_parent_code";
+    private static DictHolder INSTANCE;
 
     private List<DictItem> dictItemList;
 
-    private Map<String, Map<String, Map<String, DictItem>>> dictMap;
+    private Map<String, Map<String, DictItem>> businessType2CodeMap;
+
+    private Map<String, Map<String, List<DictItem>>> businessType2ParentCodeMap;
 
     private DictProvider dictProvider;
-
-    @Autowired
-    private ObjectProvider<DictLanguageGetter> dictLanguageGetterObjectProvider;
 
     public DictHolder(){
         dictItemList = new ArrayList<>();
@@ -53,55 +46,37 @@ public class DictHolder implements InitializingBean {
         return this;
     }
 
-    public DictHolder add(String parentKey, String code, String name){
-        addItem(null, parentKey, code, name, null);
+    public DictHolder add(String businessType, String code, String name){
+        addItem(businessType, null, code, name, null);
         return this;
     }
 
-    public DictHolder add(String code, String name){
-        addItem(null, null, code, name, null);
-        return this;
+    public static DictItem get(String businessType, String code){
+        Assert.notNull(INSTANCE, "DictHolder is uninitialized");
+        if(!INSTANCE.businessType2CodeMap.containsKey(businessType)){
+            return null;
+        }
+        Map<String, DictItem> code2DictMap = INSTANCE.businessType2CodeMap.get(businessType);
+        return code2DictMap == null ? null : code2DictMap.get(code);
     }
 
-    public List<IDictionary> getDictionaryList(String businessType, String parentCode){
-        String type = StringUtils.hasText(businessType) ? DEFAULT_BUSINESS_TYPE : businessType;
-        String parent = StringUtils.hasText(parentCode) ? DEFAULT_PARENT_CODE : parentCode;
-        if(!dictMap.containsKey(type) || !dictMap.get(businessType).containsKey(parent)){
+    public static List<DictItem> getList(String businessType, String parentCode){
+        Assert.notNull(INSTANCE, "DictHolder is uninitialized");
+        if(!INSTANCE.businessType2ParentCodeMap.containsKey(businessType)){
             return new ArrayList<>();
         }
-
-        Map<String, DictItem> code2DictMap = dictMap.get(type).get(parent);
-        return code2DictMap.values().stream().map(item -> toIDictionary(item)).collect(Collectors.toList());
-    }
-
-
-    public IDictionary getDictionary(String businessType, String parentCode, String code){
-        String type = StringUtils.hasText(businessType) ? DEFAULT_BUSINESS_TYPE : businessType;
-        String parent = StringUtils.hasText(parentCode) ? DEFAULT_PARENT_CODE : parentCode;
-        if(!dictMap.containsKey(type) || !dictMap.get(businessType).containsKey(parent)){
-            return null;
-        }
-        return toIDictionary(dictMap.get(type).get(parent).get(code));
-    }
-
-    private IDictionary toIDictionary(DictItem dictItem){
-        if(dictItem == null){
-            return null;
-        }
-        DictLanguageGetter dictLanguageGetter = dictLanguageGetterObjectProvider.getIfAvailable();
-        IDictionary dictionary = new IDictionary();
-        dictionary.setCode(dictItem.getCode());
-        dictionary.setName(dictLanguageGetter == null || dictLanguageGetter.isChinese() ? dictItem.getName() : dictItem.getNameEn());
-        return dictionary;
+        Map<String, List<DictItem>> parentCode2DictListMap = INSTANCE.businessType2ParentCodeMap.get(businessType);
+        return parentCode2DictListMap == null ? null : parentCode2DictListMap.get(parentCode);
     }
 
     private void addItem(String businessType, String parentCode, String code, String name, String nameEn){
+        Assert.notNull(businessType, "businessType must not be null");
         Assert.notNull(code, "code must not be null");
         Assert.notNull(name, "name must not be null");
 
         DictItem dictItem = new DictItem();
-        dictItem.setBusinessType(businessType == null ? DEFAULT_BUSINESS_TYPE : businessType);
-        dictItem.setParentCode(parentCode == null ? DEFAULT_PARENT_CODE : parentCode);
+        dictItem.setBusinessType(businessType);
+        dictItem.setParentCode(parentCode);
         dictItem.setCode(code);
         dictItem.setName(name);
         dictItem.setNameEn(nameEn);
@@ -110,18 +85,22 @@ public class DictHolder implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        INSTANCE = this;
         if(dictItemList == null || dictItemList.isEmpty()){
-            dictMap = new HashMap<>();
+            businessType2CodeMap = new HashMap<>();
+            businessType2ParentCodeMap = new HashMap<>();
             return;
         }
         Map<String, List<DictItem>> businessType2DictList = dictItemList.stream().collect(Collectors.groupingBy(item -> item.getBusinessType()));
-        dictMap = businessType2DictList.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> toParentCode2CodeMap(entry.getValue()), (o, n) -> n));
+        businessType2CodeMap = businessType2DictList.entrySet()
+                .stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> toCode2DictItem(entry.getValue()), (o, n) -> n));
+
+        businessType2ParentCodeMap = businessType2DictList.entrySet()
+                .stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> toParentCode2DictItemListMap(entry.getValue()), (o, n) -> n));
     }
 
-
-    private Map<String, Map<String, DictItem>> toParentCode2CodeMap(List<DictItem> dictItemList){
-        Map<String, List<DictItem>> parentCode2DictList = dictItemList.stream().collect(Collectors.groupingBy(item -> item.getParentCode()));
-        return parentCode2DictList.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> toCode2DictItem(entry.getValue()), (o, n) -> n));
+    private Map<String, List<DictItem>> toParentCode2DictItemListMap(List<DictItem> dictItemList){
+        return dictItemList.stream().filter(item -> StringUtils.hasText(item.getParentCode())).collect(Collectors.groupingBy(item -> item.getParentCode()));
     }
 
     private Map<String, DictItem> toCode2DictItem(List<DictItem> dictItemList){
