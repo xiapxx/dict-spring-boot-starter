@@ -19,19 +19,19 @@ public abstract class AbstractDict {
         this.dictLanguageGetter = dictLanguageGetter;
     }
 
-    public final String getBusinessType() {
+    public String getBusinessType() {
         return dictItem.getBusinessType();
     }
 
-    public final String getParentCode(){
+    public String getParentCode(){
         return dictItem.getParentCode();
     }
 
-    public final String getCode(){
+    public String getCode(){
         return dictItem.getCode();
     }
 
-    public final String getName(){
+    public String getName(){
         if(this.name == null){
             this.name = dictLanguageGetter == null || dictLanguageGetter.isChinese() ? dictItem.getName() : dictItem.getNameEn();
         }
