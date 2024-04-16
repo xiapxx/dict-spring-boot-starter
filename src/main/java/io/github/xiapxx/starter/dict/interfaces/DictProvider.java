@@ -1,6 +1,6 @@
 package io.github.xiapxx.starter.dict.interfaces;
 
-import io.github.xiapxx.starter.dict.holder.DictItem;
+import io.github.xiapxx.starter.dict.core.DictItem;
 import java.util.List;
 
 /**

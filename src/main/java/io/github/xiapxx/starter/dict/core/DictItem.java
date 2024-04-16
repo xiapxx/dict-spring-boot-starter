@@ -1,4 +1,4 @@
-package io.github.xiapxx.starter.dict.holder;
+package io.github.xiapxx.starter.dict.core;
 
 /**
  * 1. 需保证businessType+code联合唯一

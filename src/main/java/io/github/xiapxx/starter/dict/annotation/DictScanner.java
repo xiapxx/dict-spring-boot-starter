@@ -1,6 +1,5 @@
 package io.github.xiapxx.starter.dict.annotation;
 
-import io.github.xiapxx.starter.dict.DictAutoConfiguration;
 import io.github.xiapxx.starter.dict.core.DictRegister;
 import org.springframework.context.annotation.Import;
 import java.lang.annotation.Documented;
@@ -16,7 +15,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({DictRegister.class, DictAutoConfiguration.class})
+@Import(DictRegister.class)
 public @interface DictScanner {
 
     String[] basePackages();

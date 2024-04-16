@@ -1,8 +1,6 @@
 package io.github.xiapxx.starter.dict.core;
 
 import io.github.xiapxx.starter.dict.annotation.Dict;
-import io.github.xiapxx.starter.dict.holder.DictHolder;
-import io.github.xiapxx.starter.dict.holder.DictItem;
 import io.github.xiapxx.starter.dict.interfaces.AbstractDict;
 import io.github.xiapxx.starter.dict.interfaces.DictLanguageGetter;
 import org.apache.ibatis.type.BaseTypeHandler;

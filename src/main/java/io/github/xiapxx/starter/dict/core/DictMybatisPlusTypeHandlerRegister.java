@@ -24,7 +24,7 @@ public class DictMybatisPlusTypeHandlerRegister<T extends AbstractDict> implemen
         DictLanguageGetter dictLanguageGetter = dictLanguageGetterObjectProvider.getIfAvailable();
         TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
         for (Map.Entry<Class<? extends AbstractDict>, Dict> entry : DictRegister.class2DictMap.entrySet()) {
-            Class<T> dictClazz = ( Class<T>) entry.getKey();
+            Class<T> dictClazz = (Class<T>) entry.getKey();
             typeHandlerRegistry.register(dictClazz, new DictTypeHandler<>(dictClazz, entry.getValue(), dictLanguageGetter));
         }
     }
