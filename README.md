@@ -6,17 +6,6 @@
        class XXXconfig {...}
    
     2. 加载字典数据
-        方式1：
-        @Bean
-        public DictHolder dictHolder(){
-            DictHolder dictHolder = new DictHolder();
-            dictHolder.add("SEX_CODE", 1, "男");
-            ...
-            dictHolder.add("SEX_CODE", 0, "女");
-            return dictHolder;
-        }
-        方式2：
-
         @Service
         class XXServiceImpl implements DictProvider {
 
