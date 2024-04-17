@@ -29,10 +29,26 @@ public class DictRegister implements ImportBeanDefinitionRegistrar {
         loadClass2DictMap(importMetadata);
 
         registerTypeHandlerRegister(registry, dictHolderBeanName);
+
+        registerSerializeRegister(registry);
     }
 
     /**
-     * 注册type handler的注册对象
+     * 如果项目依赖了spring-boot-starter-web, 那么将支持前端传入的code转换为字典对象
+     *
+     * @param registry registry
+     */
+    private void registerSerializeRegister(BeanDefinitionRegistry registry){
+        try {
+            Class.forName("org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer");
+            BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(DictSerializerRegister.class);
+            registry.registerBeanDefinition(DictSerializerRegister.class.getName(), beanDefinitionBuilder.getBeanDefinition());
+        } catch (ClassNotFoundException e) {
+        }
+    }
+
+    /**
+     * 如果项目依赖了mybatis或mybatis plus, 那么将支持数据库中查询出的code转换为字典对象
      *
      * @param registry registry
      * @param dictHolderBeanName dictHolderBeanName
