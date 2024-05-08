@@ -45,13 +45,5 @@
     3. 如果项目依赖了spring web:  将支持前端传入的code转换成字典对象;
                                 将支持字典对象转换为json供前端使用;
                                 将支持通过实现DictLanguageGetter接口决定输出字典name是中文还是英文
-       另外, 如果需自定义com.fasterxml.jackson.databind.ObjectMapper对象, 请务必Jackson2ObjectMapperBuilder来实例化ObjectMapper对象, 例如:
-       
-       @Bean
-       public com.fasterxml.jackson.databind.ObjectMapper objectMapper(org.springframework.http.converter.json.Jackson2ObjectMapperBuilder builder){
-            ObjectMapper objectMapper = builder.build();
-            ...
-            return objectMapper;
-       }
-
+      
     
