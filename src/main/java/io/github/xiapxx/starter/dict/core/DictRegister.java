@@ -40,7 +40,7 @@ public class DictRegister implements ImportBeanDefinitionRegistrar {
      */
     private void registerSerializeRegister(BeanDefinitionRegistry registry){
         try {
-            Class.forName("org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer");
+            Class.forName("org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter");
             BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(DictSerializerRegister.class);
             registry.registerBeanDefinition(DictSerializerRegister.class.getName(), beanDefinitionBuilder.getBeanDefinition());
         } catch (ClassNotFoundException e) {
