@@ -1,6 +1,6 @@
 package io.github.xiapxx.starter.dict.mybatistypehandler;
 
-import io.github.xiapxx.starter.dict.enums.DictCodeType;
+import io.github.xiapxx.starter.dict.enums.DictCodeJdbcType;
 import io.github.xiapxx.starter.dict.holder.DictHolder;
 import io.github.xiapxx.starter.dict.entity.AbstractDict;
 import org.apache.ibatis.type.BaseTypeHandler;
@@ -27,7 +27,7 @@ public class MybatisTypeHandler<T extends AbstractDict> extends BaseTypeHandler<
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, T dict, JdbcType jdbcType) throws SQLException {
         String code = dict.getCode();
-        DictCodeType dictCodeType = dict.codeType();
+        DictCodeJdbcType dictCodeType = dict.codeJdbcType();
         switch (dictCodeType) {
             case INT:
                 Integer codeInteger = Integer.valueOf(code);

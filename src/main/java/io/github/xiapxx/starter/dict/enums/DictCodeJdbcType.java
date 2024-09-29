@@ -7,7 +7,7 @@ package io.github.xiapxx.starter.dict.enums;
  * @Author xiapeng
  * @Date 2024-09-28 12:35
  */
-public enum DictCodeType {
+public enum DictCodeJdbcType {
     STRING, INT, LONG;
 
 }

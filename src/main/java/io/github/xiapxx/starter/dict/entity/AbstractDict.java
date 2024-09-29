@@ -1,6 +1,6 @@
 package io.github.xiapxx.starter.dict.entity;
 
-import io.github.xiapxx.starter.dict.enums.DictCodeType;
+import io.github.xiapxx.starter.dict.enums.DictCodeJdbcType;
 import io.github.xiapxx.starter.dict.holder.DictHolder;
 import org.springframework.util.StringUtils;
 import java.io.Serializable;
@@ -27,8 +27,8 @@ public abstract class AbstractDict<PARENT extends AbstractDict> implements Seria
         return DictHolder.get(parentCode, parentDictClass);
     }
 
-    public DictCodeType codeType() {
-        return DictCodeType.STRING;
+    public DictCodeJdbcType codeJdbcType() {
+        return DictCodeJdbcType.STRING;
     }
 
     public void initParentDictClass(Class<PARENT> parentDictClass) {
