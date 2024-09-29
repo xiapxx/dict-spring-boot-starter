@@ -30,7 +30,37 @@ public class DictHolder {
     private DictHolder(){}
 
     /**
-     * 根据字典编码已经字典类获取字典对象
+     * 根据字典编码获取字典对象
+     *
+     * @param code code
+     * @param dictClass dictClass
+     * @return 字典对象
+     * @param <T>
+     */
+    public static <T extends AbstractDict> T get(Long code, Class<T> dictClass) {
+        if(code == null){
+            return null;
+        }
+        return get(code.toString(), dictClass);
+    }
+
+    /**
+     * 根据字典编码获取字典对象
+     *
+     * @param code code
+     * @param dictClass dictClass
+     * @return 字典对象
+     * @param <T>
+     */
+    public static <T extends AbstractDict> T get(Integer code, Class<T> dictClass) {
+       if(code == null){
+           return null;
+       }
+       return get(code.toString(), dictClass);
+    }
+
+    /**
+     * 根据字典编码获取字典对象
      *
      * @param code code
      * @param dictClass dictClass
@@ -67,6 +97,36 @@ public class DictHolder {
             return null;
         }
         return (List<T>) name2DataList.get(name);
+    }
+
+    /**
+     * 根据父编码获取字典集合
+     *
+     * @param parentCode parentCode
+     * @param dictClass dictClass
+     * @return 字典集合
+     * @param <T>
+     */
+    public static <T extends AbstractDict> List<T> getList(Long parentCode, Class<T> dictClass) {
+        if(parentCode == null){
+            return null;
+        }
+        return getList(parentCode.toString(), dictClass);
+    }
+
+    /**
+     * 根据父编码获取字典集合
+     *
+     * @param parentCode parentCode
+     * @param dictClass dictClass
+     * @return 字典集合
+     * @param <T>
+     */
+    public static <T extends AbstractDict> List<T> getList(Integer parentCode, Class<T> dictClass) {
+       if(parentCode == null){
+           return null;
+       }
+       return getList(parentCode.toString(), dictClass);
     }
 
     /**

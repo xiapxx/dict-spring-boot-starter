@@ -1,5 +1,6 @@
 package io.github.xiapxx.starter.dict.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.xiapxx.starter.dict.enums.DictCodeJdbcType;
 import io.github.xiapxx.starter.dict.holder.DictHolder;
 import org.springframework.util.StringUtils;
@@ -25,6 +26,38 @@ public abstract class AbstractDict<PARENT extends AbstractDict> implements Seria
 
     public PARENT parent() {
         return DictHolder.get(parentCode, parentDictClass);
+    }
+
+    @JsonIgnore
+    public Long getLongParentCode(){
+        if(!StringUtils.hasLength(parentCode)){
+            return null;
+        }
+        return Long.valueOf(parentCode);
+    }
+
+    @JsonIgnore
+    public Integer getIntParentCode(){
+        if(!StringUtils.hasLength(parentCode)){
+            return null;
+        }
+        return Integer.valueOf(parentCode);
+    }
+
+    @JsonIgnore
+    public Integer getIntCode(){
+        if(!StringUtils.hasLength(code)){
+            return null;
+        }
+        return Integer.valueOf(code);
+    }
+
+    @JsonIgnore
+    public Long getLongCode(){
+        if(!StringUtils.hasLength(code)){
+            return null;
+        }
+        return Long.valueOf(code);
     }
 
     public DictCodeJdbcType codeJdbcType() {

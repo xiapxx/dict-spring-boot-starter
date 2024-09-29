@@ -26,19 +26,16 @@ public class MybatisTypeHandler<T extends AbstractDict> extends BaseTypeHandler<
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, T dict, JdbcType jdbcType) throws SQLException {
-        String code = dict.getCode();
         DictCodeJdbcType dictCodeType = dict.codeJdbcType();
         switch (dictCodeType) {
             case INT:
-                Integer codeInteger = Integer.valueOf(code);
-                ps.setInt(i, codeInteger.intValue());
+                ps.setInt(i, dict.getIntCode());
                 break;
             case LONG:
-                Long codeLong = Long.valueOf(code);
-                ps.setLong(i, codeLong.longValue());
+                ps.setLong(i, dict.getLongCode());
                 break;
             case STRING:
-                ps.setString(i, code);
+                ps.setString(i, dict.getCode());
                 break;
         }
     }
