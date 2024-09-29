@@ -1,6 +1,6 @@
 package io.github.xiapxx.starter.dict.annotation;
 
-import io.github.xiapxx.starter.dict.core.DictRegister;
+import io.github.xiapxx.starter.dict.DictRegister;
 import org.springframework.context.annotation.Import;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
